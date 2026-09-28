@@ -1,32 +1,44 @@
 # Firebase Setup Anleitung
 
-Damit die App funktioniert, benötigst du ein kostenloses Firebase-Projekt. Folge diesen Schritten:
+Für den Lagermanager wird ein Firebase-Projekt mit E-Mail/Passwort-Authentifizierung und Firestore benötigt.
 
 ## 1. Projekt erstellen
-1.  Gehe auf [console.firebase.google.com](https://console.firebase.google.com/).
-2.  Melde dich mit deinem Google-Konto an.
-3.  Klicke auf **"Projekt hinzufügen"**.
-4.  Nenne es "Lagermanager" und klicke auf "Weiter" (Google Analytics kannst du deaktivieren).
-5.  Klicke auf **"Projekt erstellen"**.
+1. Öffne die Firebase Console.
+2. Erstelle ein Projekt, z. B. `Lagermanager`.
+3. Erstelle eine Web-App und übernimm die Projektkonfiguration in `src/config/firebase.ts`.
 
-## 2. App registrieren & Config kopieren
-1.  Klicke im Projekt auf das **Web-Symbol** (`</>`) (unter "Los gehts, füge Firebase zu deiner App hinzu").
-2.  Gib der App einen Namen (z.B. "Lagermanager Web") und klicke auf **"App registrieren"**.
-3.  Du siehst nun einen Code-Block mit `const firebaseConfig = { ... };`.
-4.  **KOPIERE diesen Block** (nur den Teil zwischen den geschweiften Klammern `{ ... }`).
-5.  **Sende mir diesen Code** oder füge ihn selbst in `src/config/firebase.ts` ein.
+Die Firebase-Web-Konfiguration ist kein Ersatz für Firestore-Sicherheitsregeln. Zugangsschutz erfolgt über Authentication und die Rules in `firestore.rules`.
 
-## 3. Authentication aktivieren (WICHTIG)
-1.  Gehe im linken Menü auf **"Erstellen"** -> **"Authentication"**.
-2.  Klicke auf **"Los gehts"**.
-3.  Wähle **"E-Mail/Passwort"** als Anbietermethode.
-4.  Aktiviere den Schalter **"Aktivieren"** und klicke auf **"Speichern"**.
+## 2. Authentication aktivieren
+1. Öffne **Authentication**.
+2. Aktiviere **E-Mail/Passwort**.
+3. Lege einen Testbenutzer an oder registriere dich über die App.
 
-## 4. Firestore Datenbank erstellen (WICHTIG)
-1.  Gehe im linken Menü auf **"Erstellen"** -> **"Firestore Database"**.
-2.  Klicke auf **"Datenbank erstellen"**.
-3.  Wähle einen Standort (z.B. `eur3` für Europa) und klicke auf "Weiter".
-4.  Wähle **"Im Testmodus starten"** (damit wir sofort loslegen können) und klicke auf **"Erstellen"**.
+## 3. Firestore einrichten
+1. Öffne **Firestore Database**.
+2. Erstelle die Datenbank in der gewünschten Region.
+3. Verwende **nicht dauerhaft den Testmodus**.
+4. Veröffentliche die mitgelieferte `firestore.rules` im Firebase-Projekt.
 
----
-Sobald du mir die Config geschickt hast, trage ich sie für dich ein!
+Die Regeln beschränken `rooms` und `boxes` auf den angemeldeten Benutzer, dessen UID im Dokument als `userId` gespeichert ist. Nicht angemeldete Zugriffe werden abgewiesen.
+
+### Firebase CLI (empfohlen)
+
+Nach Installation und Anmeldung mit der Firebase CLI:
+
+```bash
+firebase init firestore
+firebase deploy --only firestore:rules
+```
+
+Wenn bereits eine lokale Firebase-Konfiguration vorhanden ist, verwende das bestehende Projekt und überschreibe die Rules nicht versehentlich mit einer anderen Projekt-ID.
+
+## 4. Wichtige Hinweise
+
+- Keine Service-Account-Schlüssel in das Repository committen.
+- Firebase-Konfigurationen nur mit den vorgesehenen öffentlichen Client-Werten verwenden; private Server-Schlüssel gehören nicht in die App.
+- Vor einem produktiven Einsatz die Firestore Rules im Firebase Emulator bzw. mit einem Testprojekt prüfen.
+
+### Änderungsprotokoll
+
+- **28.09.2026, 03:xx Europe/Vienna — Security:** Firestore von implizitem Testmodus auf dokumentierte, benutzerbezogene Zugriffskontrolle vorbereitet; `firestore.rules` ergänzt und Deployment beschrieben.
