@@ -25,8 +25,8 @@ Firebase authentication and Firestore access should be protected by deployed Fir
 
 ## Change Log
 
-### 2026-09-28 03:xx Europe/Vienna (CEST) — CI / Web / Security
+### 2026-09-28 03:41 Europe/Vienna (CEST) — CI / Web / Security
 - Added automated Expo web-export validation.
 - Added project documentation and explicit production-security guidance.
 
-> Time is recorded in Europe/Vienna; the repository change was made during this work session.
+> The timestamp uses the verified Europe/Vienna minute in which the change set's draft PR was created.
